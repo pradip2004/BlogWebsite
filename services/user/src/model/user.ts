@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema<IUser>({
       },
       image: {
             type: String,
-            required: true,
+            required: false,
       },
       instagram: {
             type: String,
