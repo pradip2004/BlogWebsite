@@ -44,9 +44,27 @@ export const getAllBlogs = async (req: Request, res: Response) => {
 export const getBlogById = async (req: Request, res: Response) => {
       try {
             const { id } = req.params;
+            const cacheKey = `blog:${id}`;
+            const cached = await redisClient.get(cacheKey);
+            if(cached) {
+                  console.log("Cache hit");
+                  return res.json(JSON.parse(cached));
+            }
             const blog = await sql`SELECT * FROM blogs WHERE id = ${id}`;
 
+            if (blog.length === 0) {
+                  return res.status(404).json({ message: "Blog not found" });
+            }
+            
+
             const {data} = await axios.get(`${process.env.USER_SERVICE_URL}/api/v1/user/${blog[0].author}`)
+
+            // @Redis implementation
+            await redisClient.set(cacheKey, JSON.stringify({blog: blog[0], author: data}), {
+                  EX: 60 * 60 * 24,
+            });
+
+
             res.json({blog: blog[0], author: data});
       } catch (error) {
             res.status(500).json({ message: "Internal server error" });
