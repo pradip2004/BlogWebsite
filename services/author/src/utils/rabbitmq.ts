@@ -37,3 +37,17 @@ export const publishToQueue = async (queueName: string, message: string) => {
 };
 
 
+export const invalidateCache = async (cacheKeys: string[]) => {
+      try {
+            const message = {
+                  action: "invalidateCache",
+                  keys: cacheKeys,
+            }
+
+            await publishToQueue("cache-invalidation", JSON.stringify(message));
+            console.log("✅ Cache invalidation message sent to queue");
+      } catch (error) {
+            console.error("❌ Failed to invalidate cache", error);
+            
+      }
+}
