@@ -3,6 +3,7 @@ import { AuthReq } from "../types/AuthReq.js";
 import getBuffer from "../utils/dataUri.js";
 import { v2 as cloudinary } from "cloudinary";
 import { sql } from "../config/db.js";
+import { invalidateCache } from "../utils/rabbitmq.js";
 
 export const createBlog = async (req: AuthReq, res: Response) => {
       try {
@@ -39,8 +40,9 @@ export const createBlog = async (req: AuthReq, res: Response) => {
 
             const result = await sql`
             INSERT INTO blogs (title, description, image, blogcontent, category, author) VALUES (${title}, ${description}, ${cloud.secure_url}, ${blogcontent}, ${category}, ${req.user._id})
-            RETURNING *;
-      `
+            RETURNING *`;
+
+            await invalidateCache(["blogs:*"])
 
             res.json({
                   message: "Blog created successfully",
@@ -107,6 +109,8 @@ export const updateBlog = async (req: AuthReq, res: Response) => {
             WHERE id = ${id}
             RETURNING * `;
 
+            await invalidateCache(["blogs:*", `blogs:${id}`])
+
             res.json({
                   message: "Blog Updated",
                   blog: updateBlog[0],
@@ -142,6 +146,8 @@ export const deleteBlog = async (req: AuthReq, res: Response) => {
             await sql`DELETE FROM savedblogs WHERE blogid = ${req.params.id}`;
             await sql`DELETE FROM comments WHERE blogid = ${req.params.id}`;
             await sql`DELETE FROM blogs WHERE id = ${req.params.id}`;
+
+            await invalidateCache(["blogs:*", `blogs:${req.params.id}`])
             res.json({
                   message: "Blog deleted successfully",
             });

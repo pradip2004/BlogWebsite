@@ -4,9 +4,13 @@ import { initDB } from './config/db.js';
 import blogRouter from './routes/blog.js';
 import { connectRabbitMQ } from './utils/rabbitmq.js';
 import { v2 as cloudinary } from 'cloudinary';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
+
+app.use(express.json());
+app.use(cors())
 
 connectRabbitMQ();
 
