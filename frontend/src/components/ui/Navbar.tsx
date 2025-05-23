@@ -10,7 +10,7 @@ const Navbar = () => {
       const [isOpen, setIsOpen] = useState(false)
       const {loading, isAuth} = useAppContext();
       return (
-             <nav className="bg-white shadow-md p-4 z-50">
+             <nav className="bg-white shadow-md p-4 z-50 fixed top-0 left-0 w-full h-[10vh]">
       <div className="container mx-auto flex justify-between items-center">
         <Link href={"/blogs"} className="text-xl font-bold text-gray-900">
           The Reading Retreat
