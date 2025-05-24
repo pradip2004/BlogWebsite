@@ -34,6 +34,9 @@ const AddBlog = () => {
     image: null,
     blogcontent: ""
   })
+  const [aiTitleLoading, setAiTitleLoading] = useState(false)
+  const [aiDescLoading, setAiDescLoading] = useState(false);
+  const [aiBlogLoading, setAiBlogLoading] = useState(false);
 
   const handleInputChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -42,6 +45,52 @@ const AddBlog = () => {
   const handleFileChange = (e: any) => {
     const file = e.target.files[0]
     setFormData({ ...formData, image: file })
+  }
+
+
+  const aiTitleResponse = async () => {
+    try {
+      setAiTitleLoading(true)
+      const { data } = await axios.post(`${AUTHER_SERVICE}/api/v1/ai/title`, { text: formData.title })
+      setFormData({ ...formData, title: data });
+    } catch (error) {
+      toast.error("Problem While fetching from ai")
+      console.log(error)
+    } finally {
+      setAiTitleLoading(false)
+    }
+  }
+
+  const aiDescResponse = async () => {
+    try {
+      setAiDescLoading(true)
+      const { data } = await axios.post(`${AUTHER_SERVICE}/api/v1/ai/desc`, {
+        title: formData.title,
+        description: formData.description
+      })
+      setFormData({ ...formData, description: data });
+    } catch (error) {
+      toast.error("Problem While fetching from ai")
+      console.log(error)
+    } finally {
+      setAiDescLoading(false)
+    }
+  }
+
+
+  const aiBlogResponse = async () => {
+    try {
+      setAiBlogLoading(true)
+      const { data } = await axios.post(`${AUTHER_SERVICE}/api/v1/ai/blog`, {
+        blog: formData.blogcontent
+      })
+      setFormData({ ...formData, blogcontent: data });
+    } catch (error) {
+      toast.error("Problem While fetching from ai")
+      console.log(error)
+    } finally {
+      setAiBlogLoading(false)
+    }
   }
 
   const config = useMemo(() => ({
@@ -89,12 +138,12 @@ const AddBlog = () => {
       setContent("");
 
       if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-      
+        fileInputRef.current.value = "";
+      }
+
     } catch (error) {
       toast.error("Error while adding blog");
-      console.log("new blog creation error",error)
+      console.log("new blog creation error", error)
     } finally {
       setLoading(false)
     }
@@ -111,17 +160,19 @@ const AddBlog = () => {
           <form onSubmit={handleSubmit} className='space-y-4'>
             <Label>Title</Label>
             <div className="flex justify-center items-center gap-2">
-              <Input name="title" value={formData.title} onChange={handleInputChange} required />
-              <Button type='button'>
-                <RefreshCw />
+              <Input name="title" value={formData.title} onChange={handleInputChange} required
+                className={aiTitleLoading ? "animate-pulse placeholder:opacity-60" : ""}
+              />
+              <Button type='button' disabled={formData.title === ""} onClick={aiTitleResponse}>
+                <RefreshCw className={aiTitleLoading ? "animate-spin" : ""} />
               </Button>
             </div>
 
             <Label>Description</Label>
             <div className="flex justify-center items-center gap-2">
-              <Input name="description" value={formData.description} onChange={handleInputChange} required />
-              <Button type='button'>
-                <RefreshCw />
+              <Input name="description" value={formData.description} onChange={handleInputChange} required className={aiDescLoading ? "animate-pulse placeholder:opacity-60" : ""} />
+              <Button type='button' disabled={formData.title === ""} onClick={aiDescResponse}>
+                <RefreshCw className={aiDescLoading ? "animate-spin" : ""} />
               </Button>
             </div>
 
@@ -149,14 +200,15 @@ const AddBlog = () => {
                 <p className='text-sm text-muted-foreground'>
                   please add image after improving your grammer.
                 </p>
-                <Button type='button' size={"sm"}>
-                  <RefreshCw size={16} />
+                <Button type='button' size={"sm"} onClick={aiBlogResponse}>
+                  <RefreshCw size={16} className={aiBlogLoading ? "animate-spin" : ""} />
                   <span className='ml-2'>Fix Grammer</span>
                 </Button>
               </div>
-              <JoditEditor ref={editor} value={content} config={config} tabIndex={1} onBlur={(newContent) => { setContent(newContent)
-                setFormData({...formData, blogcontent: newContent})
-               }} />
+              <JoditEditor ref={editor} value={content} config={config} tabIndex={1} onBlur={(newContent) => {
+                setContent(newContent)
+                setFormData({ ...formData, blogcontent: newContent })
+              }} />
             </div>
             <Button type='submit' className='w-full' disabled={loading}>
               Submit
