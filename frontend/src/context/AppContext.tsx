@@ -2,22 +2,33 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import toast, {Toaster} from 'react-hot-toast'
-import {GoogleOAuthProvider} from '@react-oauth/google'
+import toast, { Toaster } from 'react-hot-toast'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 export const USER_SERVICE = "http://localhost:5000";
 export const AUTHER_SERVICE = "http://localhost:5001";
 export const BLOG_SERVICE = "http://localhost:5002";
 
 export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  image: string;
-  instagram: string;
-  facebook: string;
-  linkedin: string;
-  bio: string;
+      _id: string;
+      name: string;
+      email: string;
+      image: string;
+      instagram: string;
+      facebook: string;
+      linkedin: string;
+      bio: string;
+}
+
+export interface Blog {
+      id: string;
+      title: string;
+      description: string;
+      category: string;
+      image: string;
+      blogcontent: string;
+      author: string;
+      created_at: string;
 }
 
 interface AppContextType {
@@ -28,6 +39,10 @@ interface AppContextType {
       setLoading: (loading: boolean) => void;
       setIsAuth: (isAuth: boolean) => void;
       logout: () => void;
+      fetchBlogs: () => Promise<void>;
+      blogLoading: boolean;
+      blogs: Blog[];
+      setBlogs: (blogs: Blog[]) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -40,13 +55,16 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const [user, setUser] = useState<User | null>(null);
       const [loading, setLoading] = useState<boolean>(false);
       const [isAuth, setIsAuth] = useState<boolean>(false);
+      const [blogLoading, setBlogLoading] = useState<boolean>(false);
+      const [blogs, setBlogs] = useState<Blog[]>([]);
+
 
       async function fetchUser() {
             setLoading(true);
             try {
                   const token = Cookies.get("token")
 
-                  const {data} = await axios.get(`${USER_SERVICE}/api/v1/me`, {
+                  const { data } = await axios.get(`${USER_SERVICE}/api/v1/me`, {
                         headers: {
                               Authorization: `Bearer ${token}`,
                         },
@@ -70,8 +88,22 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             toast.success("Logged out successfully");
       }
 
-      useEffect(()=> {
+      async function fetchBlogs() {
+            setBlogLoading(true);
+            try {
+                  const { data } = await axios.get(`${BLOG_SERVICE}/api/v1/blog/all`);
+                  setBlogs(data);
+            } catch (error) {
+                  console.log("Error fetching blogs", error);
+                  toast.error("Failed to fetch blogs");
+            } finally {
+                  setBlogLoading(false);
+            }
+      }
+
+      useEffect(() => {
             fetchUser();
+            fetchBlogs();
       }, [])
 
       return (
@@ -84,12 +116,16 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                         setLoading,
                         setIsAuth,
                         logout,
+                        fetchBlogs,
+                        blogLoading,
+                        blogs,
+                        setBlogs
                   }}
             >
                   <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>
 
-                  {children}
-                  <Toaster />
+                        {children}
+                        <Toaster />
                   </GoogleOAuthProvider>
             </AppContext.Provider>
       )
@@ -98,7 +134,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
 export const useAppContext = () => {
       const context = useContext(AppContext);
-      if(!context){
+      if (!context) {
             throw new Error("useAppContext must be used within an AppProvider");
       }
       return context;
