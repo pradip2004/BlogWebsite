@@ -38,6 +38,13 @@ export interface Blog {
       created_at: string;
 }
 
+interface SavedBlogType {
+      id: string;
+      userid: string;
+      blogid: string;
+      create_at: string;
+}
+
 interface AppContextType {
       user: User | null;
       loading: boolean;
@@ -54,6 +61,8 @@ interface AppContextType {
       setSearchQuery: (query: string) => void;
       category: string;
       setCategory: (category: string) => void;
+      savedBlogs: SavedBlogType[] | null;
+      getSavedBlogs: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -70,6 +79,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const [blogs, setBlogs] = useState<Blog[]>([]);
       const [category, setCategory] = useState("");
       const [searchQuery, setSearchQuery] = useState("");
+      const [savedBlogs, setSavedBlogs] = useState<SavedBlogType[] | null>(null);
 
 
       async function fetchUser() {
@@ -114,8 +124,26 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             }
       }
 
+      async function getSavedBlogs() {
+            const token = Cookies.get("token");
+            try {
+                  const { data } = await axios.get(
+                        `${BLOG_SERVICE}/api/v1/blog/saved/all`,
+                        {
+                              headers: {
+                                    Authorization: `Bearer ${token}`,
+                              },
+                        }
+                  );
+                  setSavedBlogs(data);
+            } catch (error) {
+                  console.log(error);
+            }
+      }
+
       useEffect(() => {
             fetchUser();
+            getSavedBlogs();
       }, [])
 
       useEffect(() => {
@@ -139,7 +167,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                         searchQuery,
                         setSearchQuery,
                         category,
-                        setCategory
+                        setCategory,
+                        savedBlogs,
+                        getSavedBlogs
                   }}
             >
                   <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>

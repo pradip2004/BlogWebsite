@@ -75,10 +75,10 @@ export const getBlogById = async (req: Request, res: Response): Promise<any> => 
 
 export const addComment = async (req: AuthReq, res: Response) => {
       try {
-            const { id: blogId } = req.params;
+            const { id: blogid } = req.params;
             const { comment } = req.body;
 
-            await sql`INSERT INTO comments (comment, blogid, userid, username) vALUES (${comment}, ${blogId}, ${req.user?._id}, ${req.user?.name}) RETURNING *`;
+            await sql`INSERT INTO comments (comment, blogid, userid, username) vALUES (${comment}, ${blogid}, ${req.user?._id}, ${req.user?.name}) RETURNING *`;
 
             res.json({
                   message: "Comment added successfully"
