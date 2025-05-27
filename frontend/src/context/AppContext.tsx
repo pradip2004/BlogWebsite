@@ -9,6 +9,13 @@ export const USER_SERVICE = "http://localhost:5000";
 export const AUTHER_SERVICE = "http://localhost:5001";
 export const BLOG_SERVICE = "http://localhost:5002";
 
+export const blogCategories = [
+      "Technology",
+      "Health",
+      "Finance",
+      "Education"
+]
+
 export interface User {
       _id: string;
       name: string;
@@ -43,6 +50,10 @@ interface AppContextType {
       blogLoading: boolean;
       blogs: Blog[];
       setBlogs: (blogs: Blog[]) => void;
+      searchQuery: string;
+      setSearchQuery: (query: string) => void;
+      category: string;
+      setCategory: (category: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -57,6 +68,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const [isAuth, setIsAuth] = useState<boolean>(false);
       const [blogLoading, setBlogLoading] = useState<boolean>(false);
       const [blogs, setBlogs] = useState<Blog[]>([]);
+      const [category, setCategory] = useState("");
+      const [searchQuery, setSearchQuery] = useState("");
 
 
       async function fetchUser() {
@@ -91,7 +104,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       async function fetchBlogs() {
             setBlogLoading(true);
             try {
-                  const { data } = await axios.get(`${BLOG_SERVICE}/api/v1/blog/all`);
+                  const { data } = await axios.get(`${BLOG_SERVICE}/api/v1/blog/all?searchQuery=${searchQuery}&category=${category}`);
                   setBlogs(data);
             } catch (error) {
                   console.log("Error fetching blogs", error);
@@ -103,8 +116,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
       useEffect(() => {
             fetchUser();
-            fetchBlogs();
       }, [])
+
+      useEffect(() => {
+            fetchBlogs();
+      }, [searchQuery, category]);
 
       return (
             <AppContext.Provider
@@ -119,7 +135,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                         fetchBlogs,
                         blogLoading,
                         blogs,
-                        setBlogs
+                        setBlogs,
+                        searchQuery,
+                        setSearchQuery,
+                        category,
+                        setCategory
                   }}
             >
                   <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>
