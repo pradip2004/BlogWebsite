@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { Button } from './button'
-import { CircleUserRoundIcon, LogIn, Menu, X } from 'lucide-react'
+import { CircleUserRoundIcon, LogIn, Menu, PenLine, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAppContext } from '@/context/AppContext'
 
@@ -12,8 +12,11 @@ const Navbar = () => {
       return (
              <nav className="bg-secondary shadow-md p-4 max-w-full ">
       <div className="container max-w-6xl mx-auto flex justify-between items-center">
-        <Link href={"/"} className="text-xl font-bold text-black hover:text-[var(--tertiary)]">
-          DevBlog.
+        <Link href={"/"} >
+          <div className="flex items-center gap-3">
+            <PenLine className="w-8 h-8 text-[#ef233c]" />
+            <span className="text-2xl font-bold text-primary">DevBlog.</span>
+          </div>
         </Link>
 
         <div className="md:hidden">
