@@ -1,13 +1,18 @@
 "use client";
+
+import Footer from '@/components/Footer';
 import Loading from '@/components/Loading';
+import { Avatar } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/AppContext';
+import { AvatarImage } from '@radix-ui/react-avatar';
 import Link from 'next/link';
 import React, { useEffect } from 'react'
 
 const HomePage = () => {
   const { isAuth, blogLoading, blogs, recentBlogs } = useAppContext();
-    
-    console.log(recentBlogs);
+
+  // console.log(recentBlogs);
   return (
     <div className='bg-primary w-full'>
       <div className='bg-secondary '>
@@ -60,8 +65,8 @@ const HomePage = () => {
 
         </div>
       </div>
-      {/* features post  */}
 
+      {/* features post  */}
 
       <div className='lg:max-w-6xl mx-auto px-4 lg:px-0 py-10'>
         {blogLoading ? (
@@ -69,7 +74,7 @@ const HomePage = () => {
         ) : (
           <div className='mt-8 flex flex-col lg:flex-row gap-8'>
             {/* Left Large Blog Card */}
-            
+
             {recentBlogs.length >= 1 && (
               <div className="w-full lg:w-1/2 flex flex-col gap-4">
                 <img
@@ -114,6 +119,47 @@ const HomePage = () => {
           </div>
         )}
       </div>
+
+      <div className='bg-secondary '>
+        <div className='lg:max-w-6xl mx-auto flex items-center justify-center'>
+          <div className='py-10 flex items-center justify-center flex-col gap-4 text-center'>
+            <h1 className='text-7xl font-medium'>Want To <span className='text-[#ef233c]'>Read More</span></h1>
+            <Button className='bg-[#ef233c] hover:bg-[#d90429]'>Read More</Button>
+          </div>
+        </div>
+      </div>
+
+
+      <div className='bg-primary my-10'>
+        <div className='lg:max-w-6xl mx-auto flex items-center justify-center'>
+          <div className='py-10 flex items-center justify-center flex-col text-center'>
+            <h1 className='text-7xl font-medium'>Top <span className='text-[#ef233c]'>Author</span></h1>
+            <div className=' mt-10'>
+              <Avatar className='flex items-center justify-center gap-10'>
+                <AvatarImage
+                  src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?cs=srgb&dl=pexels-moose-photos-170195-1036623.jpg&fm=jpg"
+                  alt="Author"
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+                <AvatarImage
+                  src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?cs=srgb&dl=pexels-moose-photos-170195-1036623.jpg&fm=jpg"
+                  alt="Author"
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+                <AvatarImage
+                  src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?cs=srgb&dl=pexels-moose-photos-170195-1036623.jpg&fm=jpg"
+                  alt="Author"
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              </Avatar>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+
 
     </div>
   )

@@ -7,12 +7,15 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useAppContext } from "@/context/AppContext";
 
 import { Filter } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Blogs = () => {
   const { toggleSidebar } = useSidebar();
-  const { loading, blogLoading, blogs } = useAppContext();
+  const { loading, blogLoading, blogs, fetchBlogs } = useAppContext();
   console.log(blogs);
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
   return (
     <div>
       {loading ? (

@@ -147,7 +147,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       useEffect(() => {
             fetchUser();
             getSavedBlogs();
-            fetchBlogs();
       }, [])
 
       useEffect(() => {
