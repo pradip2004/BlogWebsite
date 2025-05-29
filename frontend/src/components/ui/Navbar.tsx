@@ -10,10 +10,10 @@ const Navbar = () => {
       const [isOpen, setIsOpen] = useState(false)
       const {loading, isAuth} = useAppContext();
       return (
-             <nav className="bg-[#EDF6F9] shadow-md p-4 max-w-full h-[10vh]">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href={"/blogs"} className="text-xl font-bold text-gray-900">
-          The Reading Retreat
+             <nav className="bg-secondary shadow-md p-4 max-w-full ">
+      <div className="container max-w-6xl mx-auto flex justify-between items-center">
+        <Link href={"/"} className="text-xl font-bold text-black hover:text-[var(--tertiary)]">
+          DevBlog.
         </Link>
 
         <div className="md:hidden">
@@ -21,15 +21,20 @@ const Navbar = () => {
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </Button>
         </div>
-        <ul className="hidden md:flex justify-center items-center space-x-6 text-gray-700">
+        <ul className="hidden md:flex justify-center items-center space-x-6 text-[var(--tertiary)]">
           <li>
-            <Link href={"/blogs"} className="hover:text-blue-500">
+            <Link href={"/"} className="hover:text-black">
               Home
+            </Link>
+          </li>
+          <li>
+            <Link href={"/blogs"} className="hover:text-black">
+              Blogs
             </Link>
           </li>
           {isAuth && (
             <li>
-              <Link href={"/blog/saved"} className="hover:text-blue-500">
+              <Link href={"/blog/saved"} className="hover:text-black">
                 Saved Blogs
               </Link>
             </li>
@@ -39,12 +44,12 @@ const Navbar = () => {
           ) : (
             <li>
               {isAuth ? (
-                <Link href={"/profile"} className="hover:text-blue-500">
+                <Link href={"/profile"} className="hover:text-black">
                   <CircleUserRoundIcon />
                 </Link>
               ) : (
-                <Link href={"/login"} className="hover:text-blue-500">
-                  <LogIn />
+                <Link href={"/login"} className="hover:text-black">
+                  <Button variant={"secondary"}>👋 Login</Button>
                 </Link>
               )}
             </li>

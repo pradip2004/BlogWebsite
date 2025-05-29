@@ -63,6 +63,7 @@ interface AppContextType {
       setCategory: (category: string) => void;
       savedBlogs: SavedBlogType[] | null;
       getSavedBlogs: () => Promise<void>;
+      recentBlogs: Blog[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -80,6 +81,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const [category, setCategory] = useState("");
       const [searchQuery, setSearchQuery] = useState("");
       const [savedBlogs, setSavedBlogs] = useState<SavedBlogType[] | null>(null);
+      const [recentBlogs, setRecentBlogs] = useState<Blog[]>([]);
+
 
 
       async function fetchUser() {
@@ -144,7 +147,13 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       useEffect(() => {
             fetchUser();
             getSavedBlogs();
+            fetchBlogs();
       }, [])
+
+      useEffect(() => {
+            const sortedRecent = blogs.slice(0, 4);
+            setRecentBlogs(sortedRecent);
+      }, [blogs]);
 
       useEffect(() => {
             fetchBlogs();
@@ -169,7 +178,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
                         category,
                         setCategory,
                         savedBlogs,
-                        getSavedBlogs
+                        getSavedBlogs,
+                        recentBlogs
                   }}
             >
                   <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>

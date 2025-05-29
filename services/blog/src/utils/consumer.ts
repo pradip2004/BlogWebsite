@@ -28,6 +28,7 @@ export const startCacheConsumer = async () => {
                               console.log("✅ Cache invalidation message received", content);
 
                               if(content.action === "invalidateCache") {
+                                    console.log("I'm in the if check")
                                     for(const pattern of content.keys) {
                                           const keys = await redisClient.keys(pattern);
 

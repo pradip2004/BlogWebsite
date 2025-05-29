@@ -16,10 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen bg-primary">
         <AppProvider>
           <Navbar />
-          <div className="w-full mt-[10vh]">
+          <div className="w-full">
             {children}
           </div>
         </AppProvider>

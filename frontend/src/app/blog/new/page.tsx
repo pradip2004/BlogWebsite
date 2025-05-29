@@ -38,6 +38,7 @@ const AddBlog = () => {
   const [aiDescLoading, setAiDescLoading] = useState(false);
   const [aiBlogLoading, setAiBlogLoading] = useState(false);
 
+
   const handleInputChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }

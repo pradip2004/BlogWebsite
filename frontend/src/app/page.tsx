@@ -1,8 +1,121 @@
-import React from 'react'
+"use client";
+import Loading from '@/components/Loading';
+import { useAppContext } from '@/context/AppContext';
+import Link from 'next/link';
+import React, { useEffect } from 'react'
 
 const HomePage = () => {
+  const { isAuth, blogLoading, blogs, recentBlogs } = useAppContext();
+    
+    console.log(recentBlogs);
   return (
-    <div>HomePage</div>
+    <div className='bg-primary w-full'>
+      <div className='bg-secondary '>
+        <div className='lg:max-w-6xl mx-auto flex items-center justify-between'>
+          <div className='py-10'>
+            <h1 className='text-7xl'>Human</h1>
+            <h1 className="text-7xl">stories & ideas</h1>
+            <p className='text-xl mt-5 text-[var(--tertiary)]'>A place to read, write, and deepen your understanding.</p>
+          </div>
+
+          {isAuth ? (
+            <Link href={'/blog/new'} className='hidden md:block relative'>
+              <svg
+                viewBox="0 0 200 200"
+                width="200"
+                height="200"
+                // className="text-lg tracking-widest animate-spin animatedButton"
+                className="text-lg tracking-widest"
+              >
+                <path
+                  id="circlePath"
+                  fill="none"
+                  d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
+                />
+                <text>
+                  <textPath href='#circlePath' startOffset="0%">
+                    Write your story •
+                  </textPath>
+                  <textPath href='#circlePath' startOffset="50%">
+                    Share your idea •
+                  </textPath>
+                </text>
+              </svg>
+              <button className='absolute top-0 left-0 right-0 bottom-0 m-auto w-20 h-20 bg-[#ef233c] rounded-full flex items-center justify-center'>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="50"
+                  height="50"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                >
+                  <line x1="6" y1="18" x2="18" y2="6" />
+                  <polyline points="9 6 18 6 18 15" />
+                </svg>
+              </button>
+            </Link>
+          ) : null}
+
+        </div>
+      </div>
+      {/* features post  */}
+
+
+      <div className='lg:max-w-6xl mx-auto px-4 lg:px-0 py-10'>
+        {blogLoading ? (
+          <Loading />
+        ) : (
+          <div className='mt-8 flex flex-col lg:flex-row gap-8'>
+            {/* Left Large Blog Card */}
+            
+            {recentBlogs.length >= 1 && (
+              <div className="w-full lg:w-1/2 flex flex-col gap-4">
+                <img
+                  src={recentBlogs[0].image}
+                  alt={recentBlogs[0].title}
+                  className="rounded-3xl object-cover"
+                />
+                <div className='flex items-center gap-4'>
+                  <h1 className="font-semibold lg:text-lg">01.</h1>
+                  <span className='text-blue-800 lg:text-lg'>{recentBlogs[0].category}</span>
+                  <span className='text-gray-500'>2 days ago</span>
+                </div>
+                <Link href={`/blog/${recentBlogs[0].id}`} className='text-xl lg:text-3xl font-semibold lg:font-bold'>
+                  {recentBlogs[0].title}
+                </Link>
+              </div>
+            )}
+
+            {/* Right Small Blog Cards */}
+            {recentBlogs.length > 1 && (
+              <div className="w-full lg:w-1/2 flex flex-col gap-4">
+                {recentBlogs.slice(1).map((blog, index) => (
+                  <div key={blog.id} className="lg:h-1/3 flex justify-between gap-4">
+                    <img src={blog.image} alt={blog.title} className="rounded-3xl object-cover w-1/3 aspect-video" />
+                    <div className='w-2/3'>
+                      <div className="flex items-center gap-4 text-sm lg:text-base mb-4">
+                        <h1 className="font-semibold">0{index + 2}.</h1>
+                        <span className="text-blue-800">{blog.category}</span>
+                        <span className="text-gray-500 text-sm">2 days ago</span>
+                      </div>
+                      <Link
+                        href={`/blog/${blog.id}`}
+                        className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                      >
+                        {blog.title}
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+    </div>
   )
 }
 

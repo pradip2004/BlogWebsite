@@ -23,7 +23,6 @@ export const getAllBlogs = async (req: Request, res: Response): Promise<any> => 
             } else if (category) {
                   blogs = await sql`SELECT * FROM blogs WHERE category = ${category} ORDER BY create_at DESC`;
             } else {
-
                   blogs = await sql`SELECT * FROM blogs ORDER BY create_at DESC`;
             }
 

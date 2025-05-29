@@ -20,7 +20,7 @@ export const connectRabbitMQ = async () => {
   }
 };
 
-export const publishToQueue = async (queueName: string, message: string) => {
+export const publishToQueue = async (queueName: string, message: object) => {
       try {
             if(!channel){
                   console.error("❌ Channel is not initialized");
@@ -44,7 +44,7 @@ export const invalidateCache = async (cacheKeys: string[]) => {
                   keys: cacheKeys,
             }
 
-            await publishToQueue("cache-invalidation", JSON.stringify(message));
+            await publishToQueue("cache-invalidation", message);
             console.log("✅ Cache invalidation message sent to queue");
       } catch (error) {
             console.error("❌ Failed to invalidate cache", error);
