@@ -27,6 +27,7 @@ const ProfilePage = () => {
 
   const logoutHandler = () => {
     logout();
+    redirect("/");
   };
   const InputRef = useRef<HTMLInputElement>(null);
 

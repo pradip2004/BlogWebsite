@@ -87,7 +87,7 @@ const HomePage = () => {
                   <span className='text-blue-800 lg:text-lg'>{recentBlogs[0].category}</span>
                   <span className='text-gray-500'>2 days ago</span>
                 </div>
-                <Link href={`/blog/${recentBlogs[0].id}`} className='text-xl lg:text-3xl font-semibold lg:font-bold'>
+                <Link href={`${isAuth? `/blog/${recentBlogs[0].id}` : `/login` }`} className='text-xl lg:text-3xl font-semibold lg:font-bold'>
                   {recentBlogs[0].title}
                 </Link>
               </div>
@@ -106,7 +106,7 @@ const HomePage = () => {
                         <span className="text-gray-500 text-sm">2 days ago</span>
                       </div>
                       <Link
-                        href={`/blog/${blog.id}`}
+                        href={`${isAuth? `/blog/${blog.id}` : `/login` }`}
                         className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
                       >
                         {blog.title}
@@ -124,7 +124,9 @@ const HomePage = () => {
         <div className='lg:max-w-6xl mx-auto flex items-center justify-center'>
           <div className='py-10 flex items-center justify-center flex-col gap-4 text-center'>
             <h1 className='text-7xl font-medium'>Want To <span className='text-[#ef233c]'>Read More</span></h1>
-            <Button className='bg-[#ef233c] hover:bg-[#d90429]'>Read More</Button>
+            <Link href={'/blogs'}>
+              <Button className='bg-[#ef233c] hover:bg-[#d90429]'>Read More</Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -133,7 +135,7 @@ const HomePage = () => {
       <div className='bg-primary my-10'>
         <div className='lg:max-w-6xl mx-auto flex items-center justify-center'>
           <div className='py-10 flex items-center justify-center flex-col text-center'>
-            <h1 className='text-7xl font-medium'>Top <span className='text-[#ef233c]'>Author</span></h1>
+            <h1 className='text-6xl font-medium'>Top <span className='text-[#ef233c]'>Author</span></h1>
             <div className=' mt-10'>
               <Avatar className='flex items-center justify-center gap-10'>
                 <AvatarImage

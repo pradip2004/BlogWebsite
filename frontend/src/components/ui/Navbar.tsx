@@ -52,7 +52,7 @@ const Navbar = () => {
                 </Link>
               ) : (
                 <Link href={"/login"} className="hover:text-black">
-                  <Button variant={"secondary"}>👋 Login</Button>
+                  <Button className='bg-[#ef233c] hover:bg-[#d90429]'>👋 Login</Button>
                 </Link>
               )}
             </li>
