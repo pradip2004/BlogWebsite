@@ -7,7 +7,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { oauth2client } from "../utils/GoogleConfig.js";
 import axios from "axios";
 
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response): Promise<any> => {
       try {
             const {code} = req.body;
             if (!code) {
