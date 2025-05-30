@@ -2,7 +2,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppContext, USER_SERVICE } from "@/context/AppContext";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -21,22 +21,28 @@ import { Input } from "@/components/ui/input";
 import { redirect, useRouter } from "next/navigation";
 import UserBlogCard from "@/components/UserBlogCard";
 
+
 const ProfilePage = () => {
+  const router = useRouter();
   const { user, setUser, logout, blogs } = useAppContext();
 
-  if (!user) return redirect("/login");
-  const userBlogs = blogs.filter((blog) => blog.author === user._id);
+  useEffect(() => {
+    if (!user) {
+      router.replace("/"); // or router.push("/")
+    }
+  }, [user, router]);
+
+  const userBlogs = blogs.filter((blog) => blog.author === user?._id);
   console.log("User Blogs:", userBlogs);
 
   const logoutHandler = () => {
     logout();
-    redirect("/");
+    router.push("/");
   };
   const InputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
   const [formData, setFormData] = useState({
     name: user?.name || "",
     instagram: user?.instagram || "",
@@ -185,9 +191,12 @@ const ProfilePage = () => {
                 )}
               </div>
               <div className="flex gap-2 w-full items-center justify-center">
+
+
                 <Button onClick={logoutHandler} className="hover:bg-[var(--tertiary)]/70">
                   Logout
                 </Button>
+
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button variant={"outline"} className="">
