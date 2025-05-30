@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "@/components/Loading";
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Linkedin, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,11 +19,14 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { redirect, useRouter } from "next/navigation";
+import UserBlogCard from "@/components/UserBlogCard";
 
 const ProfilePage = () => {
-  const { user, setUser, logout } = useAppContext();
+  const { user, setUser, logout, blogs } = useAppContext();
 
   if (!user) return redirect("/login");
+  const userBlogs = blogs.filter((blog) => blog.author === user._id);
+  console.log("User Blogs:", userBlogs);
 
   const logoutHandler = () => {
     logout();
@@ -110,17 +113,16 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[90vh] p-4">
+    <div className="min-h-[91vh] bg-primary flex justify-center items-start py-10 px-2">
       {loading ? (
         <Loading />
       ) : (
-        <Card className="w-full max-w-xl shadow-lg border rounded-2xl p-6">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-semibold">Profile</CardTitle>
-
-            <CardContent className="flex flex-col items-center space-y-4">
+        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 ">
+          {/* Left: User Details */}
+          <div className="flex items-center justify-center max-w-lg h-[80vh] ">
+            <Card className="bg-secondary  border rounded-2xl shadow-lg flex flex-col items-center p-8 w-xs">
               <Avatar
-                className="w-28 h-28 border-4 border-gray-200 shadow-md cursor-pointer"
+                className="w-32 h-32 border-4 border-gray-200 shadow-md cursor-pointer mb-4"
                 onClick={clickHandler}
               >
                 <AvatarImage src={user?.image} alt="profile pic" />
@@ -132,21 +134,15 @@ const ProfilePage = () => {
                   onChange={changeHandler}
                 />
               </Avatar>
-
-              <div className="w-full space-y-2 text-center">
-                <label className="font-medium">Name</label>
-                <p>{user?.name}</p>
+              <div className="text-center w-full">
+                <h2 className="text-2xl font-bold text-primary">{user?.name}</h2>
+                <p className="text-[var(--tertiary)] mt-2">
+                  {user?.bio?.trim() ? user.bio : "No bio provided"}
+                </p>
               </div>
-
-              {user?.bio && (
-                <div className="w-full space-y-2 text-center">
-                  <label className="font-medium">Bio</label>
-                  <p>{user.bio}</p>
-                </div>
-              )}
-
-              <div className="flex gap-4 mt-3">
-                {user?.instagram && (
+              <div className="flex gap-4 mt-4">
+                {/* Instagram */}
+                {user?.instagram ? (
                   <a
                     href={user.instagram}
                     target="_blank"
@@ -154,9 +150,13 @@ const ProfilePage = () => {
                   >
                     <Instagram className="text-pink-500 text-2xl" />
                   </a>
+                ) : (
+                  <span className="opacity-40 cursor-not-allowed pointer-events-none">
+                    <Instagram className="text-pink-500 text-2xl" />
+                  </span>
                 )}
-
-                {user?.facebook && (
+                {/* Facebook */}
+                {user?.facebook ? (
                   <a
                     href={user.facebook}
                     target="_blank"
@@ -164,9 +164,13 @@ const ProfilePage = () => {
                   >
                     <Facebook className="text-blue-500 text-2xl" />
                   </a>
+                ) : (
+                  <span className="opacity-40 cursor-not-allowed pointer-events-none">
+                    <Facebook className="text-blue-500 text-2xl" />
+                  </span>
                 )}
-
-                {user?.linkedin && (
+                {/* Linkedin */}
+                {user?.linkedin ? (
                   <a
                     href={user.linkedin}
                     target="_blank"
@@ -174,24 +178,26 @@ const ProfilePage = () => {
                   >
                     <Linkedin className="text-blue-700 text-2xl" />
                   </a>
+                ) : (
+                  <span className="opacity-40 cursor-not-allowed pointer-events-none">
+                    <Linkedin className="text-blue-700 text-2xl" />
+                  </span>
                 )}
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-2 mt-6 w-full justify-center">
-                <Button onClick={logoutHandler}>Logout</Button>
-                <Button onClick={() => router.push("/blog/new")}>
-                  Add Blog
+              <div className="flex gap-2 w-full items-center justify-center">
+                <Button onClick={logoutHandler} className="hover:bg-[var(--tertiary)]/70">
+                  Logout
                 </Button>
-
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
-                    <Button variant={"outline"}>Edit</Button>
+                    <Button variant={"outline"} className="">
+                      Edit Profile
+                    </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
                       <DialogTitle>Edit Profile</DialogTitle>
                     </DialogHeader>
-
                     <div className="space-y-3">
                       <div>
                         <Label>Name</Label>
@@ -212,7 +218,7 @@ const ProfilePage = () => {
                         />
                       </div>
                       <div>
-                        <Label>instagram</Label>
+                        <Label>Instagram</Label>
                         <Input
                           value={formData.instagram}
                           onChange={(e) =>
@@ -247,7 +253,6 @@ const ProfilePage = () => {
                           }
                         />
                       </div>
-
                       <Button
                         onClick={handleFormSubmit}
                         className="w-full mt-4"
@@ -258,9 +263,39 @@ const ProfilePage = () => {
                   </DialogContent>
                 </Dialog>
               </div>
-            </CardContent>
-          </CardHeader>
-        </Card>
+            </Card>
+          </div>
+
+          {/* Right: User Blogs */}
+          <div className="flex flex-col w-full h-[80vh]">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-[var(--tertiary)]">Your Blogs</h2>
+              <Button className="bg-[#ef233c] hover:bg-[#d90429]" onClick={() => router.push("/blog/new")}>
+                <PenLine />
+                Add Blog
+              </Button>
+            </div>
+            {/* Blog list placeholder */}
+            <div className="flex flex-col gap-4 overflow-y-auto px-8">
+              {userBlogs.length > 0 ? (
+                userBlogs.map((blog) => (
+                  <UserBlogCard
+                    key={blog.id}
+                    blog={blog}
+                    onDelete={(id) => {
+                      // Remove deleted blog from UI
+                      // You can also refetch blogs if needed
+                    }}
+                  />
+                ))
+              ) : (
+                <div className="text-[var(--tertiary)] text-center opacity-60 py-12 border-2 border-dashed border-gray-300 rounded-xl">
+                  No blogs to show yet.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
