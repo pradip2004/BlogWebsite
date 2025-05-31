@@ -183,3 +183,30 @@ export const getSavedBlog = async (req: AuthReq, res: Response) => {
 
       }
 }
+
+export const unsaveBlog = async (req: AuthReq, res: Response): Promise<void> => {
+      try {
+            const { blogid } = req.params;
+            const userid = req.user?._id;
+
+            if (!blogid || !userid) {
+                  res.status(400).json({ message: "Missing blog id or userid" });
+                  return;
+            }
+
+            const existing =
+                  await sql`SELECT * FROM savedblogs WHERE userid = ${userid} AND blogid = ${blogid}`;
+
+            if (existing.length === 0) {
+                  res.status(404).json({ message: "Blog is not saved" });
+                  return
+            }
+
+            await sql`DELETE FROM savedblogs WHERE userid = ${userid} AND blogid = ${blogid}`;
+
+            res.json({ message: "Blog Unsaved" });
+      } catch (error) {
+            res.status(500).json({ message: "Internal server error" });
+            console.log("error in unsaveBlog", error);
+      }
+};
