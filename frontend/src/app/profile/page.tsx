@@ -208,7 +208,7 @@ const ProfilePage = () => {
                       <DialogTitle>Edit Profile</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-3">
-                      <div>
+                      <div className="flex flex-col items-start gap-2 justify-center mb-4">
                         <Label>Name</Label>
                         <Input
                           value={formData.name}
@@ -217,7 +217,7 @@ const ProfilePage = () => {
                           }
                         />
                       </div>
-                      <div>
+                      <div className="flex flex-col items-start gap-2 justify-center mb-4">
                         <Label>Bio</Label>
                         <Input
                           value={formData.bio}
@@ -226,7 +226,7 @@ const ProfilePage = () => {
                           }
                         />
                       </div>
-                      <div>
+                      <div className="flex flex-col items-start gap-2 justify-center mb-4">
                         <Label>Instagram</Label>
                         <Input
                           value={formData.instagram}
@@ -238,7 +238,7 @@ const ProfilePage = () => {
                           }
                         />
                       </div>
-                      <div>
+                      <div className="flex flex-col items-start gap-2 justify-center mb-4">
                         <Label>Facebook</Label>
                         <Input
                           value={formData.facebook}
@@ -250,9 +250,10 @@ const ProfilePage = () => {
                           }
                         />
                       </div>
-                      <div>
+                      <div className="flex flex-col items-start gap-2 justify-center mb-4">
                         <Label>Linkedin</Label>
                         <Input
+                          className=""
                           value={formData.linkedin}
                           onChange={(e) =>
                             setFormData({
@@ -264,7 +265,7 @@ const ProfilePage = () => {
                       </div>
                       <Button
                         onClick={handleFormSubmit}
-                        className="w-full mt-4"
+                        className="w-full mt-4 bg-[#ef233c] hover:bg-[#d90429]"
                       >
                         Save Changes
                       </Button>
