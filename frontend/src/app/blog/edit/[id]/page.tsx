@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Cookies from "js-cookie";
@@ -123,54 +124,61 @@ const EditBlogPage = () => {
     <div className="max-w-4xl mx-auto p-6">
       <Card>
         <CardHeader>
-          <h2 className="text-2xl font-bold">Add New Blog</h2>
+          <h2 className="text-2xl font-bold text-[#ef233c]">Edit Blog</h2>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Label>Title</Label>
-            <div className="flex justify-center items-center gap-2">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Title */}
+            <div>
+              <Label className="text-[var(--tertiary)] mb-2">Title</Label>
               <Input
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                placeholder="Enter Blog title"
                 required
+                className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30"
+                placeholder="Enter your blog title"
               />
             </div>
 
-            <Label>Description</Label>
-            <div className="flex justify-center items-center gap-2">
-              <Input
+            {/* Description */}
+            <div>
+              <Label className="text-[var(--tertiary)] mb-2">Description</Label>
+              <Textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Enter Blog descripiton"
                 required
+                rows={3}
+                className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30 resize-none"
+                placeholder="Write a short description..."
               />
             </div>
 
-            <Label>Category</Label>
-            <Select
-              onValueChange={(value: any) =>
-                setFormData({ ...formData, category: value })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={formData.category || "Select category"}
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {blogCategories?.map((e, i) => (
-                  <SelectItem key={i} value={e}>
-                    {e}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
+            {/* Category */}
             <div>
-              <Label>Image Upload</Label>
+              <Label className="text-[var(--tertiary)] mb-2">Category</Label>
+              <Select
+                onValueChange={(value: any) =>
+                  setFormData({ ...formData, category: value })
+                }
+              >
+                <SelectTrigger className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30">
+                  <SelectValue placeholder={formData.category || "Select category"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {blogCategories?.map((e, i) => (
+                    <SelectItem key={i} value={e}>
+                      {e}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <Label className="text-[var(--tertiary)] mb-2">Image Upload</Label>
               {existingImage && !formData.image && (
                 <img
                   src={existingImage}
@@ -178,31 +186,43 @@ const EditBlogPage = () => {
                   alt=""
                 />
               )}
-              <Input type="file" accept="image/*" onChange={handleFileChange} />
-            </div>
-
-            <div>
-              <Label>Blog Content</Label>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-sm text-muted-foreground">
-                  Paste you blog or type here. You can use rich text formatting.
-                  Please add image after improving your grammer
-                </p>
-              </div>
-              <JoditEditor
-                ref={editor}
-                value={content}
-                config={config}
-                tabIndex={1}
-                onBlur={(newContent) => {
-                  setContent(newContent);
-                  setFormData({ ...formData, blogcontent: newContent });
-                }}
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Submitting" : "Submit"}
+            {/* Blog Content */}
+            <div>
+              <Label className="text-[var(--tertiary)]">Blog Content</Label>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-xs text-muted-foreground">
+                  Paste your blog or type here. You can use rich text formatting.
+                  Please add image after improving your grammar.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-300 bg-primary focus-within:border-[#ef233c] focus-within:ring-[#ef233c]/30 transition">
+                <JoditEditor
+                  ref={editor}
+                  value={content}
+                  config={config}
+                  tabIndex={1}
+                  onBlur={(newContent) => {
+                    setContent(newContent);
+                    setFormData({ ...formData, blogcontent: newContent });
+                  }}
+                />
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-[#ef233c] hover:bg-[#d90429] text-white font-semibold rounded-lg py-2 text-lg shadow"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Save Changes"}
             </Button>
           </form>
         </CardContent>

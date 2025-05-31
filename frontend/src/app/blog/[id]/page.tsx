@@ -263,7 +263,7 @@ const BlogPage = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <Button onClick={addComment} disabled={loading}>
+            <Button onClick={addComment} disabled={loading} className="bg-[#ef233c] hover:bg-[#d90429]">
               {loading ? "Adding comment..." : "Post Comment"}
             </Button>
           </CardContent>
@@ -276,35 +276,41 @@ const BlogPage = () => {
         </CardHeader>
         <CardContent>
           {comments && comments.length > 0 ? (
-            comments.map((e, i) => {
-              return (
-                <div key={i} className="border-b py-2 flex items-center gap-3">
-                  <div>
-                    <p className="font-semibold flex items-center gap-1">
-                      <span className="user border border-gray-400 rounded-full p-1">
-                        <User2 />
+            <div className="space-y-4">
+              {comments.map((e, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 border-b last:border-b-0 py-4"
+                >
+                  <span className="user border border-gray-300 rounded-full p-2 bg-primary mt-1">
+                    <User2 className="text-[#ef233c]" />
+                  </span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-semibold text-secondary">{e.username}</span>
+                      <span className="text-xs text-gray-400">
+                        {new Date(e.create_at).toLocaleString()}
                       </span>
-                      {e.username}
-                    </p>
-                    <p>{e.comment}</p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(e.create_at).toLocaleString()}
-                    </p>
+                    </div>
+                    <p className="text-[var(--tertiary)]">{e.comment}</p>
                   </div>
                   {e.userid === user?._id && (
                     <Button
                       onClick={() => deleteComment(e.id)}
-                      variant={"destructive"}
+                      variant="destructive"
+                      size="icon"
                       disabled={loading}
+                      className="rounded-full ml-2"
+                      aria-label="Delete Comment"
                     >
                       <Trash2 />
                     </Button>
                   )}
                 </div>
-              );
-            })
+              ))}
+            </div>
           ) : (
-            <p>No Comments Yet</p>
+            <p className="text-[var(--tertiary)] text-center py-8">No Comments Yet</p>
           )}
         </CardContent>
       </Card>

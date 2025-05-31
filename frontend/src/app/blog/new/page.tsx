@@ -11,6 +11,7 @@ import Cookies from 'js-cookie'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { AUTHER_SERVICE } from '@/context/AppContext'
+import { Textarea } from '@/components/ui/textarea';
 
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false })
 
@@ -155,63 +156,103 @@ const AddBlog = () => {
     <div className='max-w-4xl mx-auto p-6'>
       <Card>
         <CardHeader>
-          <h2 className='text-2xl font-bold'>Add New blog</h2>
+          <h2 className='text-2xl font-bold text-[#ef233c]'>Add New Blog</h2>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className='space-y-4'>
-            <Label>Title</Label>
-            <div className="flex justify-center items-center gap-2">
-              <Input name="title" value={formData.title} onChange={handleInputChange} required
-                className={aiTitleLoading ? "animate-pulse placeholder:opacity-60" : ""}
-              />
-              <Button type='button' disabled={formData.title === ""} onClick={aiTitleResponse}>
-                <RefreshCw className={aiTitleLoading ? "animate-spin" : ""} />
-              </Button>
-            </div>
-
-            <Label>Description</Label>
-            <div className="flex justify-center items-center gap-2">
-              <Input name="description" value={formData.description} onChange={handleInputChange} required className={aiDescLoading ? "animate-pulse placeholder:opacity-60" : ""} />
-              <Button type='button' disabled={formData.title === ""} onClick={aiDescResponse}>
-                <RefreshCw className={aiDescLoading ? "animate-spin" : ""} />
-              </Button>
-            </div>
-
-            <Label>Category</Label>
-            <Select onValueChange={(value: any) => setFormData({ ...formData, category: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder={formData.category || "Select category"} />
-              </SelectTrigger>
-              <SelectContent>
-                {blogCategories?.map((cat, index) => (
-                  <SelectItem key={index} value={cat}>
-                    {cat}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <form onSubmit={handleSubmit} className='space-y-6'>
+            {/* Title */}
             <div>
-              <Label>Image Uplaod</Label>
-              <Input type="file" accept='image/*' onChange={handleFileChange} ref={fileInputRef} />
-            </div>
-
-            <div>
-              <Label>Blog Content</Label>
-              <div className='flex justify-between items-center mb-2'>
-                <p className='text-sm text-muted-foreground'>
-                  please add image after improving your grammer.
-                </p>
-                <Button type='button' size={"sm"} onClick={aiBlogResponse}>
-                  <RefreshCw size={16} className={aiBlogLoading ? "animate-spin" : ""} />
-                  <span className='ml-2'>Fix Grammer</span>
+              <Label className="text-[var(--tertiary)] mb-2">Title</Label>
+              <div className="flex items-center gap-2 mt-1">
+                <Input
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className={`bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30 ${aiTitleLoading ? "animate-pulse placeholder:opacity-60" : ""}`}
+                  placeholder="Enter your blog title"
+                />
+                <Button type='button' disabled={formData.title === ""} onClick={aiTitleResponse} size="icon" variant="ghost">
+                  <RefreshCw className={aiTitleLoading ? "animate-spin" : ""} />
                 </Button>
               </div>
-              <JoditEditor ref={editor} value={content} config={config} tabIndex={1} onBlur={(newContent) => {
-                setContent(newContent)
-                setFormData({ ...formData, blogcontent: newContent })
-              }} />
             </div>
-            <Button type='submit' className='w-full' disabled={loading}>
+
+            {/* Description */}
+            <div>
+              <Label className="text-[var(--tertiary)]  mb-2">Description</Label>
+              <div className="flex items-center gap-2 mt-1">
+                <Textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                  rows={3}
+                  className={`bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30 resize-none ${aiDescLoading ? "animate-pulse placeholder:opacity-60" : ""}`}
+                  placeholder="Write a short description..."
+                />
+                <Button type='button' disabled={formData.title === ""} onClick={aiDescResponse} size="icon" variant="ghost">
+                  <RefreshCw className={aiDescLoading ? "animate-spin" : ""} />
+                </Button>
+              </div>
+            </div>
+
+            {/* Category */}
+            <div>
+              <Label className="text-[var(--tertiary)]  mb-2">Category</Label>
+              <Select onValueChange={(value: any) => setFormData({ ...formData, category: value })}>
+                <SelectTrigger className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30">
+                  <SelectValue placeholder={formData.category || "Select category"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {blogCategories?.map((cat, index) => (
+                    <SelectItem key={index} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <Label className="text-[var(--tertiary)]  mb-2">Image Upload</Label>
+              <Input
+                type="file"
+                accept='image/*'
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30"
+              />
+            </div>
+
+            {/* Blog Content */}
+            <div>
+              <Label className="text-[var(--tertiary)]">Blog Content</Label>
+              <div className='flex justify-between items-center mb-2'>
+                <p className='text-xs text-muted-foreground'>
+                  Please add image after improving your grammar.
+                </p>
+                <Button type='button' size="sm" onClick={aiBlogResponse} variant="outline">
+                  <RefreshCw size={16} className={aiBlogLoading ? "animate-spin" : ""} />
+                  <span className='ml-2'>Fix Grammar</span>
+                </Button>
+              </div>
+              <div className="rounded-lg border border-gray-300 bg-primary focus-within:border-[#ef233c] focus-within:ring-[#ef233c]/30 transition">
+                <JoditEditor
+                  ref={editor}
+                  value={content}
+                  config={config}
+                  tabIndex={1}
+                  onBlur={(newContent) => {
+                    setContent(newContent)
+                    setFormData({ ...formData, blogcontent: newContent })
+                  }}
+                />
+              </div>
+            </div>
+
+            <Button type='submit' className='w-full bg-[#ef233c] hover:bg-[#d90429] text-white font-semibold rounded-lg py-2 text-lg shadow' disabled={loading}>
               Submit
             </Button>
           </form>
