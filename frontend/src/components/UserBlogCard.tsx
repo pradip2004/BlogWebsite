@@ -33,6 +33,7 @@ const UserBlogCard: React.FC<UserBlogCardProps> = ({ blog, onDelete }) => {
                         toast.success(data.message);
                         onDelete(blog.id);
                   } catch (error) {
+                        console.error("Error deleting blog:", error);
                         toast.error("Problem while deleting blog");
                   } finally {
                         setLoading(false);

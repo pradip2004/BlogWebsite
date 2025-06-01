@@ -10,7 +10,7 @@ import { BLOG_SERVICE } from "@/context/AppContext";
 
 const SavedBlogs = () => {
   const { blogs, savedBlogs, getSavedBlogs } = useAppContext();
-  const [removing, setRemoving] = useState<string | null>(null);
+  // const [removing, setRemoving] = useState<string | null>(null);
   const [localSaved, setLocalSaved] = useState(savedBlogs);
 
   React.useEffect(() => {
@@ -26,7 +26,7 @@ const SavedBlogs = () => {
   );
 
   const handleUnsave = async (id: string) => {
-    setRemoving(id);
+    // setRemoving(id);
     try {
       const token = Cookies.get("token");
       await axios.delete(`${BLOG_SERVICE}/api/v1/unsave/${id}`, {
@@ -40,10 +40,9 @@ const SavedBlogs = () => {
       // Optionally refresh global savedBlogs
       getSavedBlogs && getSavedBlogs();
     } catch (error) {
+      console.error("Error unsaving blog:", error);
       toast.error("Failed to unsave blog");
-    } finally {
-      setRemoving(null);
-    }
+    } 
   };
 
   return (

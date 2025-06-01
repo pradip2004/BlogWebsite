@@ -19,7 +19,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import { AUTHER_SERVICE, Blog, BLOG_SERVICE, useAppContext, User } from "@/context/AppContext";
+import { AUTHER_SERVICE, Blog, BLOG_SERVICE, SavedBlogType, useAppContext, User } from "@/context/AppContext";
 import Loading from "@/components/Loading";
 
 interface Comment {
@@ -75,6 +75,7 @@ const BlogPage = () => {
       setComment("");
       fetchComment();
     } catch (error) {
+      console.log(error);
       toast.error("Problem while adding comment");
     } finally {
       setLoading(false);
@@ -148,7 +149,7 @@ const BlogPage = () => {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (savedBlogs && savedBlogs.some((b: any) => b.blogid === id)) {
+    if (savedBlogs && savedBlogs.some((b: SavedBlogType) => b.blogid === id)) {
       setSaved(true);
     } else {
       setSaved(false);

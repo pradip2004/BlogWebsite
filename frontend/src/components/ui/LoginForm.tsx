@@ -32,6 +32,7 @@ export function LoginForm({
       setUser(result.data.user)
       setLoading(false)
     } catch (error) {
+      console.error("Login failed:", error)
       setLoading(false)
       toast.error("Login failed")
 

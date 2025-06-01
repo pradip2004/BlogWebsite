@@ -38,7 +38,7 @@ export interface Blog {
       created_at: string;
 }
 
-interface SavedBlogType {
+export interface SavedBlogType {
       id: string;
       userid: string;
       blogid: string;

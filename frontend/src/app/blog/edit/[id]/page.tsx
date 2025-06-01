@@ -25,14 +25,19 @@ const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 const EditBlogPage = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  const router = useRouter();
 
   const { fetchBlogs } = useAppContext();
 
   const { id } = useParams();
 
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    category: string;
+    image: File | null;
+    blogcontent: string;
+  }>({
     title: "",
     description: "",
     category: "",
@@ -40,14 +45,18 @@ const EditBlogPage = () => {
     blogcontent: "",
   });
 
-  const handleInputChange = (e: any) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, image: file });
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      setFormData({ ...formData, image: file ?? null })
+    }
 
   const config = useMemo(
     () => ({
@@ -85,7 +94,7 @@ const EditBlogPage = () => {
     if (id) fetchBlog();
   }, [id]);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -115,6 +124,7 @@ const EditBlogPage = () => {
       toast.success(data.message);
       fetchBlogs();
     } catch (error) {
+      console.error("Error while adding blog:", error);
       toast.error("Error while adding blog");
     } finally {
       setLoading(false);
@@ -140,26 +150,23 @@ const EditBlogPage = () => {
                 placeholder="Enter your blog title"
               />
             </div>
-
-            {/* Description */}
-            <div>
-              <Label className="text-[var(--tertiary)] mb-2">Description</Label>
               <Textarea
                 name="description"
                 value={formData.description}
-                onChange={handleInputChange}
+                onChange={handleTextareaChange}
                 required
                 rows={3}
                 className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30 resize-none"
                 placeholder="Write a short description..."
               />
-            </div>
+                
+            
 
             {/* Category */}
             <div>
               <Label className="text-[var(--tertiary)] mb-2">Category</Label>
               <Select
-                onValueChange={(value: any) =>
+                onValueChange={(value: string) =>
                   setFormData({ ...formData, category: value })
                 }
               >

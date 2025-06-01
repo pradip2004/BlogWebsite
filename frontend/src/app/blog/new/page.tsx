@@ -28,7 +28,13 @@ const AddBlog = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    category: string;
+    image: File | null;
+    blogcontent: string;
+  }>({
     title: "",
     description: "",
     category: "",
@@ -40,13 +46,13 @@ const AddBlog = () => {
   const [aiBlogLoading, setAiBlogLoading] = useState(false);
 
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0]
-    setFormData({ ...formData, image: file })
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    setFormData({ ...formData, image: file ?? null })
   }
 
 
@@ -102,7 +108,7 @@ const AddBlog = () => {
     []
   );
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const fromDataToSend = new FormData();
@@ -200,7 +206,7 @@ const AddBlog = () => {
             {/* Category */}
             <div>
               <Label className="text-[var(--tertiary)]  mb-2">Category</Label>
-              <Select onValueChange={(value: any) => setFormData({ ...formData, category: value })}>
+              <Select onValueChange={(value: string) => setFormData({ ...formData, category: value })}>
                 <SelectTrigger className="bg-primary border border-gray-300 rounded-lg focus:border-[#ef233c] focus:ring-[#ef233c]/30">
                   <SelectValue placeholder={formData.category || "Select category"} />
                 </SelectTrigger>

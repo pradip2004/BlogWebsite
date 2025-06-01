@@ -2,7 +2,7 @@
 import { LoginForm } from "@/components/ui/LoginForm"
 import { useAppContext } from "@/context/AppContext"
 import { redirect } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 
 const img = [
   "https://i.pinimg.com/736x/b7/84/f4/b784f4474f2957e9ac29f1c4d6d68cd8.jpg",

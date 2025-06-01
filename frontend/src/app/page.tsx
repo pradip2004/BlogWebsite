@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/AppContext';
 import { AvatarImage } from '@radix-ui/react-avatar';
 import Link from 'next/link';
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const HomePage = () => {
-  const { isAuth, blogLoading, blogs, recentBlogs } = useAppContext();
+  const { isAuth, blogLoading, recentBlogs } = useAppContext();
 
   // console.log(recentBlogs);
   return (
