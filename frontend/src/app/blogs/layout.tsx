@@ -10,7 +10,7 @@ const HomeLayout: React.FC<BlogsProps> = ({children}) => {
   return (
 
       <SidebarProvider >
-            <SideBar />
+            
             <main className='w-full '>
                   <div className='w-full  px-4 '>
                         {children}
