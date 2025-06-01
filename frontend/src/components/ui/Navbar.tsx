@@ -15,7 +15,7 @@ const Navbar = () => {
         <Link href={"/"} >
           <div className="flex items-center gap-3">
             <PenLine className="w-8 h-8 text-[#ef233c]" />
-            <span className="text-2xl font-bold text-primary">DevBlog.</span>
+            <span className="text-2xl font-bold text-primary">DevStories.</span>
           </div>
         </Link>
 

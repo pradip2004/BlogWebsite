@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <PenLine className="w-8 h-8 text-[#ef233c]" />
-            <span className="text-2xl font-bold text-primary">DevBlog.</span>
+            <span className="text-2xl font-bold text-primary">DevStories.</span>
           </div>
           <p className="text-[var(--tertiary)] max-w-md">
             Discover, share, and read inspiring stories from real people. Join our community and start your journey today.
@@ -59,7 +59,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="border-t border-gray-200 mt-8 py-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} DevBlog. All rights reserved.
+        © {new Date().getFullYear()} DevStories. All rights reserved.
       </div>
     </footer>
   );
