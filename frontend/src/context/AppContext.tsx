@@ -5,9 +5,9 @@ import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 
-export const USER_SERVICE = "http://localhost:5000";
-export const AUTHER_SERVICE = "http://localhost:5001";
-export const BLOG_SERVICE = "http://localhost:5002";
+export const USER_SERVICE = process.env.NEXT_PUBLIC_USER_SERVICE;
+export const AUTHER_SERVICE = process.env.NEXT_PUBLIC_AUTHER_SERVICE;
+export const BLOG_SERVICE = process.env.NEXT_PUBLIC_BLOG_SERVICE;
 
 export const blogCategories = [
       "Technology",
