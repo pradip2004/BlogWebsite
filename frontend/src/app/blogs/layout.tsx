@@ -1,4 +1,3 @@
-import SideBar from '@/components/SideBar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import React, { ReactNode } from 'react'
 
