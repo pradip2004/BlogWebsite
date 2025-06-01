@@ -14,6 +14,7 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
   const { setUser, setLoading, setIsAuth } = useAppContext()
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const responseGoogle = async (authResult: any) => {
     try {
       setLoading(true)

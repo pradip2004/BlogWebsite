@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card} from "@/components/ui/card";
 import { useAppContext, USER_SERVICE } from "@/context/AppContext";
 import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { redirect, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import UserBlogCard from "@/components/UserBlogCard";
 
 
@@ -55,8 +55,8 @@ const ProfilePage = () => {
     InputRef.current?.click();
   };
 
-  const changeHandler = async (e: any) => {
-    const file = e.target.files[0];
+  const changeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
     if (file) {
       const formData = new FormData();
@@ -83,6 +83,7 @@ const ProfilePage = () => {
         });
         setUser(data.user);
       } catch (error) {
+        console.error("Image update error:", error);
         toast.error("Image Update Failed");
         setLoading(false);
       }
@@ -113,6 +114,7 @@ const ProfilePage = () => {
       setUser(data.user);
       setOpen(false);
     } catch (error) {
+      console.error("Profile update error:", error);
       toast.error("Update Failed");
       setLoading(false);
     }
@@ -292,10 +294,9 @@ const ProfilePage = () => {
                   <UserBlogCard
                     key={blog.id}
                     blog={blog}
-                    onDelete={(id) => {
-                      // Remove deleted blog from UI
-                      // You can also refetch blogs if needed
-                    }}
+                    onDelete={() => {
+                    }
+                  }
                   />
                 ))
               ) : (

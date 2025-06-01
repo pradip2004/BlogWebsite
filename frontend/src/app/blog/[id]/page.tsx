@@ -173,6 +173,7 @@ const BlogPage = () => {
       setSaved(!saved);
       getSavedBlogs();
     } catch (error) {
+      console.log(error);
       toast.error("Problem while saving blog");
     } finally {
       setLoading(false);

@@ -17,7 +17,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 import toast from "react-hot-toast";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { AUTHER_SERVICE, BLOG_SERVICE, blogCategories, useAppContext } from "@/context/AppContext";
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });

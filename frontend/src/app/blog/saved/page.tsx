@@ -38,7 +38,7 @@ const SavedBlogs = () => {
       setLocalSaved((prev) => prev?.filter((saved) => saved.blogid !== id) || []);
       toast.success("Blog unsaved!");
       // Optionally refresh global savedBlogs
-      getSavedBlogs && getSavedBlogs();
+      if (getSavedBlogs) getSavedBlogs();
     } catch (error) {
       console.error("Error unsaving blog:", error);
       toast.error("Failed to unsave blog");
