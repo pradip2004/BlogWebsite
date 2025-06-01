@@ -65,15 +65,20 @@ const Navbar = () => {
           isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
         )}
       >
-        <ul className="flex flex-col justify-center items-center space-y-4 p-4 text-gray-700 bg-white shadow-md">
+        <ul className="flex flex-col justify-center items-center space-y-4 p-4 text-[var(--tertiary)] bg-white shadow-md">
           <li>
-            <Link href={"/"} className="hover:text-blue-500">
+            <Link href={"/"} className="hover:text-black">
               Home
+            </Link>
+          </li>
+          <li>
+            <Link href={"/blogs"} className="hover:text-black">
+              Blogs
             </Link>
           </li>
           {isAuth && (
             <li>
-              <Link href={"/blog/saved"} className="hover:text-blue-500">
+              <Link href={"/blog/saved"} className="hover:text-black">
                 Saved Blogs
               </Link>
             </li>
@@ -83,11 +88,11 @@ const Navbar = () => {
           ) : (
             <li>
               {isAuth ? (
-                <Link href={"/profile"} className="hover:text-blue-500">
+                <Link href={"/profile"} className="hover:text-black">
                   <CircleUserRoundIcon />
                 </Link>
               ) : (
-                <Link href={"/login"} className="hover:text-blue-500">
+                <Link href={"/login"} className="hover:text-black">
                   <LogIn />
                 </Link>
               )}
